@@ -3,6 +3,7 @@
 export VERTICES_RWAJUR2,
 		RwaJur2Exposure,
 		RwaJur2Parameters,
+		getRwaJur2Parameters,
 		getLongExposureArray,
 		getShortExposureArray,
 		getRwaJur2NetExposure,
@@ -112,6 +113,24 @@ type RwaJur2Parameters
 	date::Date
 	M2::Float64
 end #type
+
+"""
+    getRwaJur2Parameters(date::Date)
+
+Return RWA JUR2 parameters supplied by BCB for `date::Date`. 	
+"""
+function getRwaJur2Parameters(date::Date)
+	if date <= Date(2012, 4, 29)
+		M2 = 2.28
+	elseif date <= Date(2012, 8, 30)
+		M2 = 2.75
+	elseif date <= Date(2012, 12, 30)
+		M2 = 3.22
+	else
+		M2 = 3.7
+	end #if
+	return(RwaJur2Parameters(date, M2))
+end #function
 
 """
     getLongExposureArray(rExp::RwaJur2Exposure)
@@ -242,12 +261,12 @@ function getRwaJur2HorizontalGapBetweenZones(rExp::RwaJur2Exposure)
 end #function
 
 """
-	getPJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters)
+	getPJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters=getRwaJur2Parameters(rExp.date))
 	
 Calculate PJUR2 using maturity ladder methodology.
 
 """
-function getPJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters)
+function getPJur2(rExp::RwaJur2Exposure, par=getRwaJur2Parameters(rExp.date))
 	EL = getRwaJur2NetExposure(rExp)
 	DV = getRwaJur2VerticalGap(rExp)
 	DHZ = getRwaJur2HorizontalGapWithinZones(rExp)
@@ -257,13 +276,13 @@ function getPJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters)
 end #function
 
 """
-	getRwaJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters)
+	getRwaJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters=getRwaJur2Parameters(rExp.date))
 	
 Calculate risk-weighted assets for foreign currency coupon exposures (RWA JUR2),
 using maturity ladder methodology.
 	
 """
-function getRwaJur2(rExp::RwaJur2Exposure, par::RwaJur2Parameters)
+function getRwaJur2(rExp::RwaJur2Exposure, par=getRwaJur2Parameters(rExp.date))
 	(1/(getF(par.date))) * getPJur2(rExp, par)
 end #function
 
