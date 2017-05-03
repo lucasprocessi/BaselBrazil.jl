@@ -110,6 +110,6 @@ m = linearXMapping(maturities, exposures, standardizedVertices)
 
 maturities = [70]
 m = linearXMapping(maturities, exposures, standardizedVertices)
-@test all(abs(m .- [100*(70/63), 0, 0]) .< 1e-5)
+@test all(abs(m .- [0, 0, 100*(70/63)]) .< 1e-5)
 
 println("OK!")
