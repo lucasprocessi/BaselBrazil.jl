@@ -70,7 +70,7 @@ function linearXMapping(maturities::Array{Int64,1}, exposures::Array{Float64,1},
 
 	N = size(maturities, 1)
 	NS = size(standardizedVertices, 1)
-	out = Array{Float64, 1}(NS)
+	out = zeros(NS)
 	for i = 1:N
 	
 		pos = sum(standardizedVertices .<= maturities[i])	
