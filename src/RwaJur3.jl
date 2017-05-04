@@ -3,6 +3,7 @@
 export VERTICES_RWAJUR3,
 		RwaJur3Exposure,
 		RwaJur3Parameters,
+		getRwaJur3Parameters,
 		getLongExposureArray,
 		getShortExposureArray,
 		getRwaJur3NetExposure,
@@ -114,6 +115,25 @@ type RwaJur3Parameters
 end #type
 
 """
+    getRwaJur3Parameters(date::Date)
+
+Return RWA JUR3 parameters supplied by BCB for `date::Date`. 	
+"""
+function getRwaJur3Parameters(date::Date)
+	if date <= Date(2012, 4, 29)
+		M3 = 1.93
+	elseif date <= Date(2012, 8, 30)
+		M3 = 2.19
+	elseif date <= Date(2012, 12, 30)
+		M3 = 2.45
+	else
+		M3 = 2.7
+	end #if
+	return(RwaJur3Parameters(date, M3))
+end #function
+
+
+"""
     getLongExposureArray(rExp::RwaJur3Exposure)
 
 Return a vector with all long exposures in sequence, 
@@ -189,18 +209,18 @@ Return a vector containing RWA JUR3 horizontal gap between zones.
 getRwaJur3HorizontalGapBetweenZones(rExp::RwaJur3Exposure) = getRwaJur2HorizontalGapBetweenZones(convert(RwaJur2Exposure, rExp))
 
 """
-	getPJur3(rExp::RwaJur3Exposure, par::RwaJur3Parameters)
+	getPJur3(rExp::RwaJur3Exposure, par::RwaJur3Parameters=getRwaJur3Parameters(rExp.date))
 	
 Calculate PJUR3 using maturity ladder methodology.
 
 """
-getPJur3(rExp::RwaJur3Exposure, par::RwaJur3Parameters) = getPJur2(convert(RwaJur2Exposure, rExp), convert(RwaJur2Parameters, par))
+getPJur3(rExp::RwaJur3Exposure, par=getRwaJur3Parameters(rExp.date)) = getPJur2(convert(RwaJur2Exposure, rExp), convert(RwaJur2Parameters, par))
 
 """
-	getRwaJur3(rExp::RwaJur3Exposure, par::RwaJur3Parameters)
+	getRwaJur3(rExp::RwaJur3Exposure, par::RwaJur3Parameters=getRwaJur3Parameters(rExp.date))
 	
 Calculate risk-weighted assets for price index coupon exposures (RWA JUR3),
 using maturity ladder methodology.
 	
 """
-getRwaJur3(rExp::RwaJur3Exposure, par::RwaJur3Parameters) = getRwaJur2(convert(RwaJur2Exposure, rExp), convert(RwaJur2Parameters, par))
+getRwaJur3(rExp::RwaJur3Exposure, par=getRwaJur3Parameters(rExp.date)) = getRwaJur2(convert(RwaJur2Exposure, rExp), convert(RwaJur2Parameters, par))
