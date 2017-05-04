@@ -4,7 +4,8 @@ regulated by Brazilian financial system's supervisor (Brazilian Central Bank - B
 """
 module BaselBrazil
 
-	using Dates
+	using Base.Dates
+	using BusinessDays
 	
 	# Utils
 	include("Utils.jl")

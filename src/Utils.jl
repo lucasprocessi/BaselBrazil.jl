@@ -80,10 +80,32 @@ function linearXMapping(maturities::Array{Int64,1}, exposures::Array{Float64,1},
 			out[NS] += (maturities[i]/standardizedVertices[NS]) * exposures[i]
 		else # between two vertices
 			alpha = (standardizedVertices[pos+1] - maturities[i])/(standardizedVertices[pos+1] - standardizedVertices[pos])
-			out[pos] = alpha * exposures[i]
-			out[pos+1] = (1-alpha) * exposures[i]
+			out[pos] += alpha * exposures[i]
+			out[pos+1] += (1-alpha) * exposures[i]
 		end
 		
 	end #for
 	return(out)
+end #function
+
+"""
+	linearXMapping(date::Date, maturities::Array{Date, 1}, exposures::Array{Float64, 1}, standardizedVertices::Array{Int64, 1})
+
+Map exposures into standardized vertices (SVs), using linear method and calculating maturities in business days using 
+Brazilian holiday calendar.
+See `linearXMapping(maturities::Array{Int64,1}, exposures::Array{Float64,1}, standardizedVertices::Array{Int64,1})` for more info.
+
+# Parameters
+* `date::Date`: date of evaluation
+* `maturities::Array{Int64,1}`: an array of maturities (dates). It is not required to pass unique or ordered maturities.
+* `exposures::Array{Float64,1}`: an array of exposures (present value) to each maturity.
+* `standardizedVertices::Array{Int64,1}`: an array of ordered standardized vertices in business days, 
+such as package constants `VERTICES_RWAJUR1`, `VERTICES_RWAJUR2`, `VERTICES_RWAJUR3` and `VERTICES_RWAJUR4`.
+ 
+"""
+function linearXMapping(date::Date, maturities::Array{Date, 1}, exposures::Array{Float64, 1}, standardizedVertices::Array{Int64, 1})
+	linearXMapping(map(x -> x.value, 
+				     bdays(:Brazil, date, maturities)), 
+				 exposures, 
+				 standardizedVertices)	
 end #function
