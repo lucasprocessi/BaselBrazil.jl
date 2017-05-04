@@ -162,7 +162,7 @@ function getPCam(rExp::RwaCamExposure, RegulatoryCapital::Float64)
 	Short = getShortTotalExposures(rExp)
 	EL = Long - Short
 	
-	EXP1 = sum(EL)
+	EXP1 = abs(sum(EL))
 	
 	ExC = EL[EL .>= 0]
 	ExV = EL[EL .< 0]

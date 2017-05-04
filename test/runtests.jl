@@ -12,8 +12,6 @@ ex = [ 23786530069.3118, 3722986267.80087, 85202367.863163,
 rExp = RwaJur1Exposure(d, ex)
 par = RwaJur1Parameters(d, 1.9, 0.24, 0.16, 0.46, 0.76, 0.00076, 0.001669, 0.001479,  0.001132, 0.003497, 0.003714)
 a = getExposureArray(rExp)
-Sigma = getCovarianceMatrix(par)
-SigmaStress = getCovarianceMatrix(par, true)
 VaR = getVaR(rExp, par)
 VaRStress = getVaR(rExp, par, true)
 pj = getPJur1(rExp, par, 58774440.4205073, 161922460.712515)
@@ -33,9 +31,6 @@ ex2 = zeros(11)
 
 rExp = RwaJur2Exposure(d, "USD", ex1, ex2)
 
-EL = getRwaJur2NetExposure(rExp)
-DV = getRwaJur2VerticalGap(rExp)
-
 @test abs(getPJur2(rExp, par) -  129058649.24) < 0.1 
 println("OK!")
 
@@ -50,9 +45,6 @@ ex2 = [ 2021520.97299,  	 106395.84068,  	 0.00000,  	 0.00000,  	 0.00000,  	 0
 
 rExp = RwaJur3Exposure(d, "IPCA", ex1, ex2)
 
-EL = getRwaJur3NetExposure(rExp)
-DV = getRwaJur3VerticalGap(rExp)
-
 @test abs(getPJur3(rExp, par) -    522746060.85) < 0.1 
 println("OK!")
 
@@ -66,9 +58,6 @@ ex1 =  [  7428402.60283,  	 29643805.83779,  	 294765.30570,  	 24334011.11047, 
 ex2 = [ 2021520.97299,  	 106395.84068,  	 0.00000,  	 0.00000,  	 0.00000,  	 0.00000,  	 0.00000,  	 0.00000,  	 0.00000,  	 0.00000,  	 0.00000]
 
 rExp = RwaJur4Exposure(d, "TR", ex1, ex2)
-
-EL = getRwaJur4NetExposure(rExp)
-DV = getRwaJur4VerticalGap(rExp)
 
 @test abs(getPJur4(rExp, par) -    522746060.85) < 0.1
 println("OK!")
